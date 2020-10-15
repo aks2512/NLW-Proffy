@@ -1,56 +1,68 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, Image } from 'react-native';
+import  React, { useState, useContext } from 'react';
+import { View, Image, Text, ImageBackground, CheckBox } from 'react-native';
+import { ScrollView, TextInput, RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { RectButton } from 'react-native-gesture-handler';
+import {signIn} from '../../services/auth';
+import AuthContext from '../../contexts/auth'
 
-import api from '../../services/api';
+import logoImg from '../../../assets/splash.png';
+import background from '../../assets/images/background.png'
+
 import styles from './styles';
 
-import landingImg from '../../assets/images/landing.png';
-import studyIcon from '../../assets/images/icons/study.png';
-import heartIcon from '../../assets/images/icons/heart.png';
+const SignIn: React.FC = () => {
+    const { navigate } = useNavigation();
+    const [isSelected, setSelection] = useState(false);
+    const {signed} = useContext(AuthContext);
 
-function SignIn() {
-  const { navigate } = useNavigation();
-  const [totalConnections, setTotalConnections] = useState(0);
+    async function handleSignIn() {
+        const response = await signIn();
 
-  useEffect(() => {
-    api.get('connections').then(response => {
-      const { total } = response.data;
+    }
 
-      setTotalConnections(total);
-    });
-  }, []);
+    return (
+        <ScrollView style={styles.container}>
+            <View style={styles.banner}>
+                <ImageBackground 
+                    resizeMode="contain"
+                    source={background} 
+                    style={styles.imgBackground}
+                >         
+                    <Image style={styles.logo} source={logoImg} />
+                    <Text style={styles.title}>Sua plataforma de{'\n'}estudos online</Text>
+                </ImageBackground>
+            </View>
 
-  function handleNavigateToLandingPage() {
-    navigate('Landing');
-  }
-
-  return (
-    <View style={styles.container}>
-      <Image source={landingImg} style={styles.banner} />
-
-      <Text style={styles.title}>
-        Seja bem-vindo, {'\n'}
-        <Text style={styles.titleBold}>SignIn</Text>
-      </Text>
-
-      <View style={styles.buttonsContainer}>
-        <RectButton
-          onPress={handleNavigateToLandingPage}
-          style={[styles.button, styles.buttonPrimary]}
-        >
-          <Image source={studyIcon} />
-          <Text style={styles.buttonText}>Landing</Text>
-        </RectButton>
-      </View>
-
-      <Text style={styles.totalConnections}>
-        Total de {totalConnections} conexões já realizadas {' '}
-        <Image source={heartIcon} />
-      </Text>
-    </View>
-  )
-}
+            <View style={styles.group1}>
+                <Text style={styles.makeLogin}>Fazer login</Text>
+                <Text style={styles.createAccount}>Criar uma conta</Text>
+            </View>
+            <View style={styles.inputGroup}>
+                <TextInput
+                    style={styles.inputEmail}
+                    placeholder="E-mail"
+                    placeholderTextColor="#9C98A6"
+                />
+                <TextInput
+                    style={styles.inputPassword}
+                    placeholder="Senha"
+                    placeholderTextColor="#9C98A6"
+                />
+            </View>
+            <View style={styles.group2}>
+                <CheckBox
+                    value={isSelected}
+                    onValueChange={setSelection}
+                    style={styles.checkbox}
+                />
+                <Text style={styles.rememberMe}>Lembrar-me</Text>
+                <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
+            </View>
+            <RectButton onPress={handleSignIn} style={styles.btnLogIn}>
+                <Text style={styles.textBtnLogIn}>Entrar</Text>
+            </RectButton>
+        </ScrollView>
+    );
+};
 
 export default SignIn;
