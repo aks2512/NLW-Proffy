@@ -2,22 +2,21 @@ import  React, { useState, useContext } from 'react';
 import { View, Image, Text, ImageBackground, CheckBox } from 'react-native';
 import { ScrollView, TextInput, RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import {signIn} from '../../services/auth';
-import AuthContext from '../../contexts/auth'
+import AuthContext from '../../contexts/auth';
 
 import logoImg from '../../../assets/splash.png';
 import background from '../../assets/images/background.png'
 
 import styles from './styles';
+import signIn from '../../services/auth';
 
 const SignIn: React.FC = () => {
     const { navigate } = useNavigation();
     const [isSelected, setSelection] = useState(false);
     const {signed} = useContext(AuthContext);
 
-    async function handleSignIn() {
-        const response = await signIn();
-
+    function handleSignIn() {
+        signIn();
     }
 
     return (
