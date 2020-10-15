@@ -1,19 +1,19 @@
 import  React, { useState, useContext } from 'react';
-import { View, Image, Text, ImageBackground, CheckBox } from 'react-native';
+import { View, Image, Text, ImageBackground, CheckBox, Button } from 'react-native';
 import { ScrollView, TextInput, RectButton } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 
 import logoImg from '../../../assets/splash.png';
 import background from '../../assets/images/background.png'
 
 import styles from './styles';
-import signIn from '../../services/auth';
 
 const SignIn: React.FC = () => {
-    const { navigate } = useNavigation();
     const [isSelected, setSelection] = useState(false);
-    const {signed} = useContext(AuthContext);
+    const {signed, user, signIn} = useContext(AuthContext);
+
+    console.log(signed);
+    console.log(user);
 
     function handleSignIn() {
         signIn();
@@ -30,6 +30,7 @@ const SignIn: React.FC = () => {
                     <Image style={styles.logo} source={logoImg} />
                     <Text style={styles.title}>Sua plataforma de{'\n'}estudos online</Text>
                 </ImageBackground>
+                <Button title="Sign In" onPress={handleSignIn} />
             </View>
 
             <View style={styles.group1}>
@@ -57,7 +58,7 @@ const SignIn: React.FC = () => {
                 <Text style={styles.rememberMe}>Lembrar-me</Text>
                 <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
             </View>
-            <RectButton onPress={handleSignIn} style={styles.btnLogIn}>
+            <RectButton style={styles.btnLogIn}>
                 <Text style={styles.textBtnLogIn}>Entrar</Text>
             </RectButton>
         </ScrollView>

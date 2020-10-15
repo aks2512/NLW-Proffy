@@ -1,10 +1,12 @@
-import {createContext, useState} from 'react';
+import React,{createContext, useState} from 'react';
+import {} from '@react-native-community/async-storage';
 import * as auth from '../services/auth'
 
 interface AuthContextData {
     signed: boolean;
     user: object | null;
-        signIn(): Promise<void>
+    signIn(): Promise<void>;
+    signOut(): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -14,11 +16,15 @@ export const AuthProvider: React.FC = ({children}) => {
     
     async function signIn() {
         const response = await auth.signIn();
-
         setUser(response.user);
     }
+
+    async function signOut() {
+        setUser(null);
+    }
+
     return (
-        <AuthContext.Provider value={{signed: !!user, user, signIn}}>
+        <AuthContext.Provider value={{signed: !!user, user, signIn, signOut}}>
             {children}
         </AuthContext.Provider>
     );

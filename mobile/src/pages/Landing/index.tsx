@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, Image } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, Image, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
+
+import AuthContext from '../../contexts/auth';
 
 import api from '../../services/api';
 import styles from './styles';
@@ -11,9 +13,10 @@ import studyIcon from '../../assets/images/icons/study.png';
 import giveClassIcon from '../../assets/images/icons/give-classes.png';
 import heartIcon from '../../assets/images/icons/heart.png';
 
-function Landing() {
+const Landing: React.FC = () => {
   const { navigate } = useNavigation();
   const [totalConnections, setTotalConnections] = useState(0);
+  const { signOut } = useContext(AuthContext)
 
   useEffect(() => {
     api.get('connections').then(response => {
@@ -31,6 +34,10 @@ function Landing() {
     navigate('Study');
   }
 
+  function handleSignOut() {
+    signOut();
+  }
+
   return (
     <View style={styles.container}>
       <Image source={landingImg} style={styles.banner} />
@@ -41,6 +48,7 @@ function Landing() {
       </Text>
 
       <View style={styles.buttonsContainer}>
+        <Button title="Sign out" onPress={handleSignOut} />
         <RectButton
           onPress={handleNavigateToStudyPages}
           style={[styles.button, styles.buttonPrimary]}
