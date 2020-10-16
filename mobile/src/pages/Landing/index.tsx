@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
 
-import AuthContext from '../../contexts/auth';
+import { useAuth } from '../../contexts/auth';
 
 import api from '../../services/api';
 import styles from './styles';
@@ -16,7 +16,7 @@ import heartIcon from '../../assets/images/icons/heart.png';
 const Landing: React.FC = () => {
   const { navigate } = useNavigation();
   const [totalConnections, setTotalConnections] = useState(0);
-  const { signOut } = useContext(AuthContext)
+  const { signOut, user } = useAuth();
 
   useEffect(() => {
     api.get('connections').then(response => {
@@ -43,7 +43,7 @@ const Landing: React.FC = () => {
       <Image source={landingImg} style={styles.banner} />
 
       <Text style={styles.title}>
-        Seja bem-vindo, {'\n'}
+        Seja bem-vindo {user?.name}, {user?.email}, {'\n'}
         <Text style={styles.titleBold}>O que deseja fazer?</Text>
       </Text>
 
