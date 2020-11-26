@@ -2,6 +2,7 @@ import  React, { useState } from 'react';
 import { View, Image, Text, ImageBackground, CheckBox, Button } from 'react-native';
 import { ScrollView, TextInput, RectButton } from 'react-native-gesture-handler';
 import { useAuth } from '../../contexts/auth';
+import { useNavigation } from '@react-navigation/native';
 
 import logoImg from '../../../assets/splash.png';
 import background from '../../assets/images/background.png'
@@ -10,10 +11,15 @@ import styles from './styles';
 
 const SignIn: React.FC = () => {
     const [isSelected, setSelection] = useState(false);
+    const { navigate } = useNavigation();
     const { signIn} = useAuth();
 
     function handleSignIn() {
         signIn();
+    }
+
+    function handleNavigateToCreateAccount() {
+        navigate('CreateAccount');
     }
 
     return (
@@ -32,7 +38,7 @@ const SignIn: React.FC = () => {
 
             <View style={styles.group1}>
                 <Text style={styles.makeLogin}>Fazer login</Text>
-                <Text style={styles.createAccount}>Criar uma conta</Text>
+                <Text style={styles.createAccount} onPress={handleNavigateToCreateAccount}>Criar uma conta</Text>
             </View>
             <View style={styles.inputGroup}>
                 <TextInput
